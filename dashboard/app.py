@@ -144,32 +144,29 @@ elif page == "Health Risk Prediction":
         'Hazardous': 'Health alert. Avoid all outdoor activity. Schools and offices should consider closure. Vulnerable groups must stay indoors.'
     }
 
-    if os.path.exists("models/random_forest_model.pkl"):
-        model = joblib.load("models/random_forest_model.pkl")
-        scaler = joblib.load("models/scaler.pkl")
-        st.success("ML Model loaded successfully.")
-    else:
-        st.warning("ML model not trained yet. Using rule-based prediction.")
-        if pm25_val <= 12:
-            predicted_risk = 'Good'
-        elif pm25_val <= 35.4:
-            predicted_risk = 'Moderate'
-        elif pm25_val <= 150.4:
-            predicted_risk = 'Unhealthy'
-        else:
-            predicted_risk = 'Hazardous'
+    model = joblib.load("models/random_forest_model.pkl")
+    scaler = joblib.load("models/scaler.pkl")
 
-        color = risk_colors[predicted_risk]
-        advice = risk_advice[predicted_risk]
+    input_data = np.array([[
+        pm10_val, pm25_val, co_val, 0, 0, 0, 0,
+        temp_val, humidity_val, 0, wind_val, 0, 0,
+        12, 1, 2026, 0
+    ]])
 
-        st.markdown("### Predicted Health Risk:")
-        st.markdown(f"""
-            <div style='background-color:{color}; padding:25px; border-radius:12px; 
-                        color:white; font-size:28px; font-weight:bold; text-align:center;'>
-                {predicted_risk}
-            </div>
-        """, unsafe_allow_html=True)
-        st.markdown(f"**Health Advice:** {advice}")
+    input_scaled = scaler.transform(input_data)
+    predicted_risk = model.predict(input_scaled)[0]
+
+    color = risk_colors[predicted_risk]
+    advice = risk_advice[predicted_risk]
+
+    st.markdown("### Predicted Health Risk:")
+    st.markdown(f"""
+        <div style='background-color:{color}; padding:25px; border-radius:12px; 
+                    color:white; font-size:28px; font-weight:bold; text-align:center;'>
+            {predicted_risk}
+        </div>
+    """, unsafe_allow_html=True)
+    st.markdown(f"**Health Advice:** {advice}")
 
 elif page == "Pollution Map":
     st.title("Pollution Map")
