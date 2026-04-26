@@ -1,4 +1,4 @@
 Model,Accuracy,F1 Score
-Decision Tree,1.0,1.0
-Random Forest,1.0,1.0
-KNN,0.9146,0.9141
+Decision Tree,0.9799,0.9798
+Random Forest,0.9826,0.9826
+KNN,0.9029,0.9024

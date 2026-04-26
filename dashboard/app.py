@@ -148,7 +148,7 @@ elif page == "Health Risk Prediction":
     scaler = joblib.load("models/scaler.pkl")
 
     input_data = np.array([[
-        pm10_val, pm25_val, co_val, 0, 0, 0, 0,
+        pm10_val,co_val, 0, 0, 0, 0,
         temp_val, humidity_val, 0, wind_val, 0, 0,
         12, 1, 2026, 0
     ]])
